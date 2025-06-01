@@ -1,0 +1,11 @@
+flask
+flask_cors
+langchain_ollama
+langchain_pinecone
+ollama
+langchain_text_splitters
+pinecone
+langchain_core
+openai
+langchain_community
+mysql
