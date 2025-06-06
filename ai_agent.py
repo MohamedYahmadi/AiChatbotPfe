@@ -84,7 +84,7 @@ def suggest_actions(prompt):
             return jsonify({
                 "response": clean_data(suggestions).strip()
             })
-        
+
 
 def predict_data(prompt):
     detect_value_prompt = ChatPromptTemplate.from_template(DETECT_VALUE_PROMPT)
@@ -95,6 +95,9 @@ def predict_data(prompt):
         "message": prompt
     }).strip()
 
+    # Clean the detected value to remove <think> tags
+    detected_value = clean_data(detected_value).strip()
+
     if detected_value == "none":
         unrelated_suggestion_prompt = ChatPromptTemplate.from_template(UNSWER_UNRELATED_SUGGESTION)
 
@@ -103,9 +106,9 @@ def predict_data(prompt):
         response_message = chain.invoke({}).strip()
 
         return jsonify({
-            "response": response_message
+            "response": clean_data(response_message).strip()
         })
-    
+
     else:
         sql_query = f"SELECT * FROM indicator WHERE name = '{detected_value}';"
 
@@ -143,10 +146,8 @@ def predict_data(prompt):
             }).strip()
 
             return jsonify({
-                "response": predictions
+                "response": clean_data(predictions).strip()
             })
-
-
     
 def clean_data(response):
     return response.replace("<think>", "").replace("</think>", "")
